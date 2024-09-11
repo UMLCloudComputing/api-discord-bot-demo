@@ -46,17 +46,8 @@ def interact(raw_request):
 
     match command_name:
         # Command /chat [arg1: message]
-        case "chat":
-            message = data["options"][0]["value"]
-            import llm
-            result = llm.invoke_llm(message, userID)
-            print(f"LLM Response: {result}")
-
-            # Count number of characters
-            if len(result) > 2000:
-                result = result[:2000] + "..."
-
-            update(result)
+        case "joke":
+            
 
         # Command /dog
         # Sends a link embedded within the link's image of a dog   
