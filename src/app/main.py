@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import time
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
@@ -47,7 +48,12 @@ def interact(raw_request):
     match command_name:
         # Command /chat [arg1: message]
         case "joke":
-            
+           message_content = requests.get("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit").json()
+           match message_content['type']:
+               case 'single':
+                   update(message_content['joke'])
+               case 'twopart':
+                   tell_two_part(message_content['setup'], message_content['delivery'])
 
         # Command /dog
         # Sends a link embedded within the link's image of a dog   
@@ -95,3 +101,8 @@ def update(message):
     print("Response status code: ")
     print(response.status_code)
     print(response.text)
+
+def tell_two_part(setup: str, delivery: str):
+    update(setup + " :drum: :drum: :drum: ")
+    time.sleep(3)
+    update(delivery)

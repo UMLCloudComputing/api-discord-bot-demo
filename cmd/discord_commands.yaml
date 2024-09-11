@@ -1,13 +1,5 @@
-- name: chat
-  description: Chat with the bot or ask questions!
-  options:
-    - name: message
-      description: The message to chat with the bot.
-      type: 3 # string
-      required: true
-
 - name: dog
   description: Fetches a random dog image.
 
 - name: joke
-  description: Fetches a random joke.
+  description: Fetches a random programming joke.
