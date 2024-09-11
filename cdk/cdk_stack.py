@@ -15,12 +15,6 @@ load_dotenv()
 class CdkStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-
-        table = dynamodb.TableV2(self, f"Table-{construct_id}",
-            table_name=f"{construct_id}",
-            partition_key=dynamodb.Attribute(name="SessionId", type=dynamodb.AttributeType.STRING),
-            # sort_key=dynamodb.Attribute(name="timestamp", type=dynamodb.AttributeType.STRING)
-        )
         
         dockerFunc = _lambda.DockerImageFunction(
             scope=self,
@@ -29,9 +23,6 @@ class CdkStack(Stack):
             environment= {
                 "DISCORD_PUBLIC_KEY" : os.getenv('DISCORD_PUBLIC_KEY'),
                 "DISCORD_ID" : os.getenv('DISCORD_ID'),
-                "PINECONE_INDEX_NAME" : os.getenv('PINECONE_INDEX_NAME'),
-                "PINECONE_API_KEY" : os.getenv('PINECONE_API_KEY'),
-                "OPENAI_API_KEY" : os.getenv('OPENAI_API_KEY'),
             },            
             code=_lambda.DockerImageCode.from_image_asset(
                 directory="src"
@@ -44,5 +35,3 @@ class CdkStack(Stack):
             handler=dockerFunc,
             proxy=True,
         )
-
-        table.grant_read_write_data(dockerFunc)
